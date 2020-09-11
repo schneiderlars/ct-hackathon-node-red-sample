@@ -1,0 +1,31 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ct-hackathon-sample',{
+        category: 'ct Hackathon',
+        color: '#77AD5B',
+        defaults: {
+            hackathonConfiguration: {value:"", type:"ct-hackathon-config"},
+            name: {value:""}
+        },
+        inputs:0,
+        outputs:1,
+        icon: "font-awesome/fa-map",
+        label: function() {
+            return this.name||"ct-hackathon-sample";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="ct-hackathon-sample">
+    <div class="form-row">
+        <label for="node-input-hackathonConfiguration"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-hackathonConfiguration" placeholder="Hackathon Configuration">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="ct-hackathon-sample">
+    <p>A ct-hackathon-sample node.</p>
+</script>
