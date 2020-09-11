@@ -4,21 +4,28 @@ export default class EventServiceController {
 
     activate() {
         const socket = this.#socket = new WebSocket("ws://localhost:1880/ws/mapapps");
-        socket.onopen = function (e) {
-            socket.send("My name is John");
+        socket.onopen = (e) => {
+            this.send("WebSocket connection established.");
         };
     }
 
     handleEvent(event) {
-        // topic = 'ct/map/EXTENT_CHANGE'
-        let topic = event.getTopic();
-
-        // reason is 'EXTENT_CHANGE' (the last topic part)
-        let reason = event.getTopicReason();
+        if(this.#socket.readyState === 1) {
+            this.sendObject({
+                topic: event.getTopic(),
+                reason: event.getTopicReason()
+            });
+        }
     }
 
-    sendWebSocketMessage(message) {
-        this.#socket.send(message);
+    send(message) {
+        this.sendObject({
+            message: message
+        });
+    }
+
+    sendObject(object) {
+        this.#socket.send(JSON.stringify(object));
     }
 
 }
