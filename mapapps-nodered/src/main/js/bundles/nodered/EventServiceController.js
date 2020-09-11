@@ -1,16 +1,27 @@
 export default class EventServiceController {
 
-    #socket = null;
+    #socketReceive = null;
+    #socketPublish = null;
 
     activate() {
-        const socket = this.#socket = new WebSocket("ws://localhost:1880/ws/mapapps");
-        socket.onopen = (e) => {
-            this.send("WebSocket connection established.");
-        };
+        const socketReceive = this.#socketReceive = new WebSocket("ws://localhost:1880/ws/mapapps/receive");
+        const socketPublish = this.#socketPublish = new WebSocket("ws://localhost:1880/ws/mapapps/publish");
+
+        socketPublish.onopen = function() {
+            var message = {
+              'cmd': 'Client connected'
+            };
+            socketReceive.send(JSON.stringify(message));
+          };
+
+          socketPublish.onmessage = function(event) {
+            debugger;
+          };
+        
     }
 
     handleEvent(event) {
-        if(this.#socket.readyState === 1) {
+        if(this.#socketReceive.readyState === 1) {
             this.sendObject({
                 topic: event.getTopic(),
                 reason: event.getTopicReason()
@@ -25,7 +36,7 @@ export default class EventServiceController {
     }
 
     sendObject(object) {
-        this.#socket.send(JSON.stringify(object));
+        this.#socketReceive.send(JSON.stringify(object));
     }
 
 }
